@@ -34,17 +34,20 @@ const createBuyer = async (req, res, next) => {
 };
 
 // Update buyer
-const updateBuyer = async (req, res, next) => {
+const updateBuyer = async (req, res) => {
   try {
-    const buyer = await buyerService.updateBuyer(req.params.id, req.body);
-    if (!buyer) {
-      return res.status(404).json({ message: 'Buyer not found' });
+    const { id } = req.params;
+    const updatedBuyer = await buyerService.updateBuyer(id, req.body);
+    if (!updatedBuyer) {
+      return res.status(404).json({ message: "Buyer not found" });
     }
-    res.status(200).json(buyer);
-  } catch (err) {
-    next(err);
+    res.status(200).json(updatedBuyer);
+  } catch (error) {
+    console.error("Error updating buyer:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };
+
 
 // Delete buyer
 const deleteBuyer = async (req, res, next) => {
@@ -66,7 +69,7 @@ const loginBuyer = async (req, res, next) => {
     const buyer = await buyerService.loginBuyer(mobile, password);
     res.status(200).json(buyer);
   } catch (err) {
-    res.status(401);  // Unauthorized
+    res.status(401);
     next(err);
   }
 };

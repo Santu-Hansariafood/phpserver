@@ -34,12 +34,12 @@ const addCompany = async (req, res) => {
 const updateCompany = async (req, res) => {
   try {
     const company = await companyService.updateCompany(req.params.id, req.body);
-    if (company) {
-      res.status(200).json(company);
-    } else {
-      res.status(404).json({ message: "Company not found" });
+    if (!company) {
+      return res.status(404).json({ message: "Company not found" });
     }
+    res.status(200).json(company);
   } catch (error) {
+    console.error("Error updating company:", error);
     res.status(500).json({ message: "Error updating company", error });
   }
 };
