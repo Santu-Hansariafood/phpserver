@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const ParameterSchema = new mongoose.Schema({
   parameter: { type: String, required: true },
-  value: { type: String, required: false }, // can be empty initially
+  value: { type: String, required: false },
 });
 
 const CommoditySchema = new mongoose.Schema({
@@ -14,7 +14,7 @@ const CompanySchema = new mongoose.Schema({
   companyName: { type: String, required: true },
   companyPhone: { type: String, required: true },
   companyEmail: { type: String, required: true },
-  consignee: [{ type: String }], // array of consignee names
+  consignee: [{ type: String }],
   group: { type: String, required: true },
   commodities: [CommoditySchema],
 });

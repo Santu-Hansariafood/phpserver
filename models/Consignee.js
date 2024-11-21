@@ -13,7 +13,11 @@ const consigneeSchema = new mongoose.Schema(
     pin: { type: String, required: true },
     contactPerson: { type: String, required: true },
     mandiLicense: { type: String, required: true },
-    activeStatus: { type: String, required: true, enum: ['active', 'inactive'] },
+    activeStatus: {
+      type: String,
+      required: true,
+      enum: ["active", "inactive"],
+    },
   },
   { timestamps: true }
 );

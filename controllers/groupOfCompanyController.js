@@ -1,6 +1,5 @@
 const groupOfCompanyService = require("../services/groupOfCompanyService");
 
-// Create a new group of company
 exports.createGroupOfCompany = async (req, res, next) => {
   try {
     const newGroup = await groupOfCompanyService.createGroup(req.body);
@@ -10,7 +9,6 @@ exports.createGroupOfCompany = async (req, res, next) => {
   }
 };
 
-// Get all groups of company
 exports.getGroupsOfCompany = async (req, res, next) => {
   try {
     const groups = await groupOfCompanyService.getAllGroups();
@@ -20,7 +18,6 @@ exports.getGroupsOfCompany = async (req, res, next) => {
   }
 };
 
-// Get a single group of company by ID
 exports.getGroupOfCompanyById = async (req, res, next) => {
   try {
     const group = await groupOfCompanyService.getGroupById(req.params.id);
@@ -34,7 +31,6 @@ exports.getGroupOfCompanyById = async (req, res, next) => {
   }
 };
 
-// Update a group of company by ID
 exports.updateGroupOfCompany = async (req, res, next) => {
   try {
     const updatedGroup = await groupOfCompanyService.updateGroup(
@@ -47,7 +43,6 @@ exports.updateGroupOfCompany = async (req, res, next) => {
   }
 };
 
-// Delete a group of company by ID
 exports.deleteGroupOfCompany = async (req, res, next) => {
   try {
     await groupOfCompanyService.deleteGroup(req.params.id);

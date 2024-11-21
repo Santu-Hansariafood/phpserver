@@ -1,4 +1,4 @@
-const Buyer = require('../models/Buyer');
+const Buyer = require("../models/Buyer");
 
 const getAllBuyers = async () => {
   return await Buyer.find();
@@ -22,9 +22,9 @@ const deleteBuyer = async (id) => {
 };
 
 const loginBuyer = async (mobile, password) => {
-  const buyer = await Buyer.findOne({ mobile, password, status: 'active' });
+  const buyer = await Buyer.findOne({ mobile, password, status: "active" });
   if (!buyer) {
-    throw new Error('Invalid credentials or inactive account');
+    throw new Error("Invalid credentials or inactive account");
   }
   return buyer;
 };

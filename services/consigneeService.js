@@ -1,6 +1,5 @@
 const Consignee = require("../models/Consignee");
 
-// Create a new Consignee
 const createConsignee = async (data) => {
   try {
     const newConsignee = new Consignee(data);
@@ -11,7 +10,6 @@ const createConsignee = async (data) => {
   }
 };
 
-// Get all consignees
 const getAllConsignees = async () => {
   try {
     const consignees = await Consignee.find();
@@ -21,7 +19,6 @@ const getAllConsignees = async () => {
   }
 };
 
-// Get a consignee by ID
 const getConsigneeById = async (id) => {
   try {
     const consignee = await Consignee.findById(id);
@@ -34,7 +31,6 @@ const getConsigneeById = async (id) => {
   }
 };
 
-// Update consignee
 const updateConsignee = async (id, data) => {
   try {
     const updatedConsignee = await Consignee.findByIdAndUpdate(id, data, {
@@ -46,7 +42,6 @@ const updateConsignee = async (id, data) => {
   }
 };
 
-// Delete consignee
 const deleteConsignee = async (id) => {
   try {
     const deletedConsignee = await Consignee.findByIdAndDelete(id);

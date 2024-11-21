@@ -1,6 +1,5 @@
-const buyerService = require('../services/buyerService');
+const buyerService = require("../services/buyerService");
 
-// Get all buyers
 const getAllBuyers = async (req, res, next) => {
   try {
     const buyers = await buyerService.getAllBuyers();
@@ -10,12 +9,11 @@ const getAllBuyers = async (req, res, next) => {
   }
 };
 
-// Get buyer by ID
 const getBuyerById = async (req, res, next) => {
   try {
     const buyer = await buyerService.getBuyerById(req.params.id);
     if (!buyer) {
-      return res.status(404).json({ message: 'Buyer not found' });
+      return res.status(404).json({ message: "Buyer not found" });
     }
     res.status(200).json(buyer);
   } catch (err) {
@@ -23,7 +21,6 @@ const getBuyerById = async (req, res, next) => {
   }
 };
 
-// Create a new buyer
 const createBuyer = async (req, res, next) => {
   try {
     const buyer = await buyerService.createBuyer(req.body);
@@ -33,7 +30,6 @@ const createBuyer = async (req, res, next) => {
   }
 };
 
-// Update buyer
 const updateBuyer = async (req, res) => {
   try {
     const { id } = req.params;
@@ -48,21 +44,18 @@ const updateBuyer = async (req, res) => {
   }
 };
 
-
-// Delete buyer
 const deleteBuyer = async (req, res, next) => {
   try {
     const buyer = await buyerService.deleteBuyer(req.params.id);
     if (!buyer) {
-      return res.status(404).json({ message: 'Buyer not found' });
+      return res.status(404).json({ message: "Buyer not found" });
     }
-    res.status(200).json({ message: 'Buyer deleted successfully' });
+    res.status(200).json({ message: "Buyer deleted successfully" });
   } catch (err) {
     next(err);
   }
 };
 
-// Login buyer
 const loginBuyer = async (req, res, next) => {
   const { mobile, password } = req.body;
   try {

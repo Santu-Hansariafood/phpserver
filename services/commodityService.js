@@ -1,4 +1,4 @@
-const Commodity = require('../models/commodity');
+const Commodity = require("../models/commodity");
 
 const createCommodity = async (data) => {
   const commodity = new Commodity(data);

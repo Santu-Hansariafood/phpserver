@@ -29,25 +29,25 @@ app.use("/api/groups", (req, res, next) => {
   require("./routes/groupOfCompanyRoutes")(req, res, next);
 });
 
-app.use("/api/buyers",(req, res, next)=>{
+app.use("/api/buyers", (req, res, next) => {
   require("./routes/buyerRoutes")(req, res, next);
-})
+});
 
-app.use("/api/commodities",(req,res,next)=>{
-  require("./routes/commodityRoutes")(req,res,next);
-})
+app.use("/api/commodities", (req, res, next) => {
+  require("./routes/commodityRoutes")(req, res, next);
+});
 
-app.use("/api/quality-parameters",(req,res,next)=>{
-  require("./routes/qualityParameterRoutes")(req,res,next);
-})
+app.use("/api/quality-parameters", (req, res, next) => {
+  require("./routes/qualityParameterRoutes")(req, res, next);
+});
 
-app.use("/api/consignees",(req,res,next)=>{
-  require("./routes/consigneeRoutes")(req,res,next);
-})
+app.use("/api/consignees", (req, res, next) => {
+  require("./routes/consigneeRoutes")(req, res, next);
+});
 
-app.use("/api/companies",(req,res,next)=>{
-  require("./routes/companyRoutes")(req,res,next);
-})
+app.use("/api/companies", (req, res, next) => {
+  require("./routes/companyRoutes")(req, res, next);
+});
 
 // Lazy-load error handler middleware
 app.use(async (err, req, res, next) => {

@@ -1,6 +1,5 @@
 const consigneeService = require("../services/consigneeService");
 
-// Create Consignee
 const createConsignee = async (req, res) => {
   try {
     const consignee = await consigneeService.createConsignee(req.body);
@@ -10,7 +9,6 @@ const createConsignee = async (req, res) => {
   }
 };
 
-// Get all consignees
 const getAllConsignees = async (req, res) => {
   try {
     const consignees = await consigneeService.getAllConsignees();
@@ -20,7 +18,6 @@ const getAllConsignees = async (req, res) => {
   }
 };
 
-// Get consignee by ID
 const getConsigneeById = async (req, res) => {
   const { id } = req.params;
 
@@ -32,7 +29,6 @@ const getConsigneeById = async (req, res) => {
   }
 };
 
-// Update consignee
 const updateConsignee = async (req, res) => {
   const { id } = req.params;
 
@@ -47,18 +43,15 @@ const updateConsignee = async (req, res) => {
   }
 };
 
-// Delete consignee
 const deleteConsignee = async (req, res) => {
   const { id } = req.params;
 
   try {
     const deletedConsignee = await consigneeService.deleteConsignee(id);
-    res
-      .status(200)
-      .json({
-        message: "Consignee deleted successfully",
-        consignee: deletedConsignee,
-      });
+    res.status(200).json({
+      message: "Consignee deleted successfully",
+      consignee: deletedConsignee,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
