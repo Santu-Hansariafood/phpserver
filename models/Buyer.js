@@ -8,6 +8,12 @@ const buyerSchema = new mongoose.Schema(
     companyName: { type: String },
     password: { type: String, required: true },
     commodity: [{ type: String }],
+    consignee: [
+      {
+        value: { type: String, required: true },
+        label: { type: String, required: true },
+      },
+    ],
     status: { type: String, enum: ["active", "inactive"], default: "active" },
   },
   { timestamps: true }
