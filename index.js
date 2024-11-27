@@ -4,6 +4,7 @@ const cors = require("cors");
 const helmet = require("helmet");
 const compression = require("compression");
 const { connectDB } = require("./config/db");
+const rateLimit = require("express-rate-limit");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -16,6 +17,12 @@ app.use(express.json());
 app.use(cors());
 app.use(compression());
 app.use(helmet());
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+});
+app.use(limiter);
 
 // Set Cache-Control headers globally for all responses (cache for 1 hour)
 app.use((req, res, next) => {
@@ -49,6 +56,13 @@ app.use("/api/companies", (req, res, next) => {
   require("./routes/companyRoutes")(req, res, next);
 });
 
+app.use("/api/sellers",(req,res,next)=>{
+  require("./routes/sellerRoutes")(req,res,next);
+})
+
+app.use("/api/seller-company",(req,res,next)=>{
+  require("./routes/sellerCompanyRoutes")(req,res,next);
+})
 // Lazy-load error handler middleware
 app.use(async (err, req, res, next) => {
   const errorHandler = await import("./middlewares/errorHandler.js");
