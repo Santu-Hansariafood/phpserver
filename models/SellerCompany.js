@@ -25,7 +25,7 @@ const sellerCompanySchema = new mongoose.Schema({
     panProof: String,
     aadhaarCard: String,
     checkCopy: String,
-    msme: String, 
+    msmeCopy: String, 
   },
 }, { timestamps: true });
 

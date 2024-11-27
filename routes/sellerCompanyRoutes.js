@@ -10,22 +10,20 @@ const {
 
 const router = express.Router();
 
-// Define upload fields for file uploads
 const uploadFields = upload.fields([
-    { name: "addressProof", maxCount: 1 },
-    { name: "gstProof", maxCount: 1 },
-    { name: "panProof", maxCount: 1 },
-    { name: "aadhaarCard", maxCount: 1 },
-    { name: "checkCopy", maxCount: 1 },
-    { name: "msmeCopy", maxCount: 1 },
-  ]);
-  
-  router.post("/", uploadFields, addSellerCompany);
-  router.put("/:id", uploadFields, updateSellerCompanyDetails);
-  
+  { name: "addressProof", maxCount: 1 },
+  { name: "gstProof", maxCount: 1 },
+  { name: "panProof", maxCount: 1 },
+  { name: "aadhaarCard", maxCount: 1 },
+  { name: "checkCopy", maxCount: 1 },
+  { name: "msmeCopy", maxCount: 1 },
+]);
+
+router.post("/", uploadFields, addSellerCompany);
+router.put("/:id", uploadFields, updateSellerCompanyDetails);
+
 router.get("/", getSellerCompanies);
 router.get("/:id", getSellerCompany);
-// router.put("/:id", uploadFields, updateSellerCompanyDetails);
 router.delete("/:id", deleteSellerCompanyRecord);
 
 module.exports = router;

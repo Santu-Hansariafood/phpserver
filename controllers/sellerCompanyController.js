@@ -26,7 +26,6 @@ const addSellerCompany = async (req, res) => {
       }
     }
 
-    // Process file uploads and construct documents object
     const documents = {};
     Object.keys(files || {}).forEach((key) => {
       if (files[key]?.[0]?.path) {
