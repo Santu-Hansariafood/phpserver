@@ -5,16 +5,21 @@ const buyerSchema = new mongoose.Schema(
     name: { type: String, required: true },
     mobile: [{ type: String, required: true }],
     email: [{ type: String, required: true }],
-    companyName: { type: String },
+    companyName: { type: String, required: true },
     password: { type: String, required: true },
-    commodity: [{ type: String }],
+    commodity: [{ type: String, required: true }],
+    brokerage: {
+      type: Map,
+      of: String,
+      required: true,
+    },
     consignee: [
       {
         value: { type: String, required: true },
         label: { type: String, required: true },
       },
     ],
-    status: { type: String, enum: ["active", "inactive"], default: "active" },
+    status: { type: String, enum: ["Active", "Inactive"], default: "Active" },
   },
   { timestamps: true }
 );
