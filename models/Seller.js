@@ -11,13 +11,17 @@ const SellerSchema = new mongoose.Schema(
     ],
     emails: [
       {
-        value: { type: String, required: true, match: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/ },
+        value: {
+          type: String,
+          required: true,
+          match: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+        },
       },
     ],
     commodities: [
       {
         name: { type: String, required: true },
-        brokerage: { type: Number, default: 0 }, // Optional, default to 0
+        brokerage: { type: Number, default: 0 },
       },
     ],
     selectedCompany: [
@@ -25,12 +29,17 @@ const SellerSchema = new mongoose.Schema(
         value: { type: String, required: true },
         label: { type: String, required: true },
       },
-    ], // Multi-selector field
+    ],
     selectedStatus: {
       type: String,
       enum: ["active", "inactive"],
       required: true,
     },
+    buyers: [
+      {
+        name: { type: String, required: true },
+      },
+    ],
   },
   { timestamps: true }
 );
