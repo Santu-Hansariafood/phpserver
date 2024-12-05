@@ -40,51 +40,41 @@ if (cluster.isMaster) {
 
   // Set Cache-Control headers globally for all responses (cache for 1 hour)
   app.use((req, res, next) => {
-    res.set("Cache-Control", "public, max-age=300");
+    res.set("Cache-Control", "public, max-age=3600");
     next();
   });
 
   // Lazy-loaded routes
-  app.use("/api/groups", async (req, res, next) => {
-    const groupRoutes = await import("./routes/groupOfCompanyRoutes");
-    groupRoutes.default(req, res, next);
+  app.use("/api/groups", (req, res, next) => {
+    require("./routes/groupOfCompanyRoutes")(req, res, next);
   });
 
-  app.use("/api/buyers", async (req, res, next) => {
-    const buyerRoutes = await import("./routes/buyerRoutes");
-    buyerRoutes.default(req, res, next);
+  app.use("/api/buyers", (req, res, next) => {
+    require("./routes/buyerRoutes")(req, res, next);
   });
 
-  app.use("/api/commodities", async (req, res, next) => {
-    const commodityRoutes = await import("./routes/commodityRoutes");
-    commodityRoutes.default(req, res, next);
+  app.use("/api/commodities", (req, res, next) => {
+    require("./routes/commodityRoutes")(req, res, next);
   });
 
-  app.use("/api/quality-parameters", async (req, res, next) => {
-    const qualityParameterRoutes = await import(
-      "./routes/qualityParameterRoutes"
-    );
-    qualityParameterRoutes.default(req, res, next);
+  app.use("/api/quality-parameters", (req, res, next) => {
+    require("./routes/qualityParameterRoutes")(req, res, next);
   });
 
-  app.use("/api/consignees", async (req, res, next) => {
-    const consigneeRoutes = await import("./routes/consigneeRoutes");
-    consigneeRoutes.default(req, res, next);
+  app.use("/api/consignees", (req, res, next) => {
+    require("./routes/consigneeRoutes")(req, res, next);
   });
 
-  app.use("/api/companies", async (req, res, next) => {
-    const companyRoutes = await import("./routes/companyRoutes");
-    companyRoutes.default(req, res, next);
+  app.use("/api/companies", (req, res, next) => {
+    require("./routes/companyRoutes")(req, res, next);
   });
 
-  app.use("/api/sellers", async (req, res, next) => {
-    const sellerRoutes = await import("./routes/sellerRoutes");
-    sellerRoutes.default(req, res, next);
+  app.use("/api/sellers", (req, res, next) => {
+    require("./routes/sellerRoutes")(req, res, next);
   });
 
-  app.use("/api/seller-company", async (req, res, next) => {
-    const sellerCompanyRoutes = await import("./routes/sellerCompanyRoutes");
-    sellerCompanyRoutes.default(req, res, next);
+  app.use("/api/seller-company", (req, res, next) => {
+    require("./routes/sellerCompanyRoutes")(req, res, next);
   });
 
   // Lazy-load error handler middleware
