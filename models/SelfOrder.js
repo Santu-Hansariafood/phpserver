@@ -35,7 +35,11 @@ const selfOrderSchema = new mongoose.Schema(
     sellerEmails: [{ type: String }],
     sendPOToBuyer: { type: String, enum: ["yes", "no"], default: "yes" },
     sendPOToSupplier: { type: String, enum: ["yes", "no"], default: "yes" },
-    billTo: { type: String, enum: ["none", "buyer", "supplier"], default: "none" },
+    billTo: {
+      type: String,
+      enum: ["none", "buyer", "supplier"],
+      default: "none",
+    },
     saudaNo: { type: String, required: true },
   },
   { timestamps: true }

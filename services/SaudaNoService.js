@@ -12,7 +12,7 @@ class SaudaNoService {
 
   static async createSaudaNo() {
     const seq = await this.getNextSequence("sauda_no");
-    const saudaNo = `SN-${seq.toString().padStart(6, "0")}`; // Format: SN-000001
+    const saudaNo = `SN-${seq.toString().padStart(6, "0")}`;
 
     const newSaudaNo = new SaudaNo({ saudaNo });
     await newSaudaNo.save();
