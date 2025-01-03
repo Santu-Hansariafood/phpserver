@@ -13,7 +13,6 @@ const baseBidSchema = new mongoose.Schema(
       default: {},
     },
     quantity: { type: Number, required: true },
-    unit: { type: String, required: true },
     rate: { type: Number, required: true },
     bidDate: { type: Date, required: true },
     startTime: { type: String, required: true },

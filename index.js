@@ -85,6 +85,18 @@ if (cluster.isMaster) {
     require("./routes/BaseBidRoutes")(req, res, next);
   });
 
+  app.use("/api/agents", (req,res,next) => {
+    require("./routes/agentRoutes")(req, res, next);
+  });
+
+  app.use("/api/self-order",(req, res, next) =>{
+    require("./routes/selfOrderRoutes")(req, res, next);
+  })
+
+  app.use("/api/sauda-no", (req, res, next) =>{
+    require("./routes/SaudaNoRoutes")(req, res, next);
+  })
+
   // Lazy-load error handler middleware
   app.use(async (err, req, res, next) => {
     const errorHandler = await import("./middlewares/errorHandler.js");
