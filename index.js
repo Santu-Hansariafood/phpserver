@@ -35,7 +35,7 @@ if (cluster.isMaster) {
   // CORS configuration
   const allowedOrigins = [
     "https://hansariafood-shop.vercel.app",
-    "http://localhost:5173/login",
+    "http://localhost:5173",
   ];
 
   const corsOptions = {
