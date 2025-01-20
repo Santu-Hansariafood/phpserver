@@ -12,7 +12,6 @@ const CommoditySchema = new mongoose.Schema({
 
 const CompanySchema = new mongoose.Schema({
   companyName: { type: String, required: true },
-  companyPhone: { type: String, required: true },
   companyEmail: { type: String, required: true },
   consignee: [{ type: String }],
   group: { type: String, required: true },
