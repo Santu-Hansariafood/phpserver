@@ -1,6 +1,7 @@
 require("dotenv").config();
 const cluster = require("cluster");
 const os = require("os");
+const path = require("path");
 
 if (cluster.isMaster) {
   console.log(`Master process ${process.pid} is running`);
@@ -28,17 +29,35 @@ if (cluster.isMaster) {
 
   // Middleware
   app.use(express.json());
-  app.use(cors());
   app.use(compression());
   app.use(helmet());
 
+  // CORS configuration
+  const allowedOrigins = [
+    "https://hansariafood-shop.vercel.app",
+    "http://localhost:5173/login",
+  ];
+
+  const corsOptions = {
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  };
+  app.use(cors(corsOptions));
+
+  // Rate limiting
   const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 100,
   });
   app.use(limiter);
 
-  // Set Cache-Control headers globally for all responses (cache for 1 hour)
+  // Cache-Control headers
   app.use((req, res, next) => {
     res.set("Cache-Control", "public, max-age=3600");
     next();
@@ -85,19 +104,26 @@ if (cluster.isMaster) {
     require("./routes/BaseBidRoutes")(req, res, next);
   });
 
-  app.use("/api/agents", (req,res,next) => {
+  app.use("/api/agents", (req, res, next) => {
     require("./routes/agentRoutes")(req, res, next);
   });
 
-  app.use("/api/self-order",(req, res, next) =>{
+  app.use("/api/self-order", (req, res, next) => {
     require("./routes/selfOrderRoutes")(req, res, next);
-  })
+  });
 
-  app.use("/api/sauda-no", (req, res, next) =>{
+  app.use("/api/sauda-no", (req, res, next) => {
     require("./routes/SaudaNoRoutes")(req, res, next);
-  })
+  });
 
-  // Lazy-load error handler middleware
+  // Serve React build files for unknown routes
+  app.use(express.static(path.join(__dirname, "client/build")));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "client/build", "index.html"));
+  });
+
+  // Lazy-loaded error handler middleware
   app.use(async (err, req, res, next) => {
     const errorHandler = await import("./middlewares/errorHandler.js");
     errorHandler.default(err, req, res, next);
