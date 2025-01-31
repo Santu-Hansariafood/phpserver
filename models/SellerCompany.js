@@ -17,6 +17,7 @@ const sellerCompanySchema = new mongoose.Schema({
       accountNumber: String,
       ifscCode: String,
       branchName: String,
+      bankName: String,
     },
   ],
   documents: {
