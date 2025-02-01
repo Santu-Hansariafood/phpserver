@@ -5,7 +5,7 @@ const buyerSchema = new mongoose.Schema(
     name: { type: String, required: true },
     mobile: [{ type: String, required: true }],
     email: [{ type: String, required: true }],
-    companyName: [{ type: String, required: true }],
+    companyName: { type: String, required: true },
     group: { type: String, required: true },
     password: { type: String, required: true },
     commodity: [{ type: String, required: true }],
@@ -20,7 +20,11 @@ const buyerSchema = new mongoose.Schema(
         label: { type: String, required: true },
       },
     ],
-    status: { type: String, enum: ["Active", "Inactive"], default: "Active" },
+    status: {
+      type: String,
+      enum: ["Active", "Inactive"],
+      default: "Active",
+    },
   },
   { timestamps: true }
 );
