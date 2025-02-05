@@ -49,6 +49,10 @@ if (cluster.isMaster) {
     require("./routes/groupOfCompanyRoutes")(req, res, next);
   });
 
+  app.use("/api/admin", (req, res, next) => {
+    require("./routes/adminRoutes")(req, res, next);
+  });  
+
   app.use("/api/buyers", (req, res, next) => {
     require("./routes/buyerRoutes")(req, res, next);
   });
@@ -85,17 +89,17 @@ if (cluster.isMaster) {
     require("./routes/BaseBidRoutes")(req, res, next);
   });
 
-  app.use("/api/agents", (req,res,next) => {
+  app.use("/api/agents", (req, res, next) => {
     require("./routes/agentRoutes")(req, res, next);
   });
 
-  app.use("/api/self-order",(req, res, next) =>{
+  app.use("/api/self-order", (req, res, next) => {
     require("./routes/selfOrderRoutes")(req, res, next);
-  })
+  });
 
-  app.use("/api/sauda-no", (req, res, next) =>{
+  app.use("/api/sauda-no", (req, res, next) => {
     require("./routes/SaudaNoRoutes")(req, res, next);
-  })
+  });
 
   // Lazy-load error handler middleware
   app.use(async (err, req, res, next) => {

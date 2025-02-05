@@ -1,6 +1,5 @@
 const sellerService = require("../services/sellerService");
 
-// Add new seller
 const addSeller = async (req, res) => {
   try {
     const sellerData = req.body;
@@ -13,7 +12,6 @@ const addSeller = async (req, res) => {
   }
 };
 
-// Get all sellers
 const getSellers = async (req, res) => {
   try {
     const sellers = await sellerService.getSellers();
@@ -25,7 +23,7 @@ const getSellers = async (req, res) => {
   }
 };
 
-// Get a seller by ID
+
 const getSeller = async (req, res) => {
   try {
     const seller = await sellerService.getSellerById(req.params.id);
@@ -38,7 +36,7 @@ const getSeller = async (req, res) => {
   }
 };
 
-// Update seller details
+
 const updateSeller = async (req, res) => {
   try {
     const seller = await sellerService.updateSeller(req.params.id, req.body);
@@ -51,7 +49,6 @@ const updateSeller = async (req, res) => {
   }
 };
 
-// Delete seller
 const deleteSeller = async (req, res) => {
   try {
     const seller = await sellerService.deleteSeller(req.params.id);
@@ -64,10 +61,34 @@ const deleteSeller = async (req, res) => {
   }
 };
 
+const loginSeller = async (req, res) => {
+  try {
+    const { phone, password } = req.body;
+
+    // Fetch seller by phone number
+    const seller = await sellerService.getSellerByPhone(phone);
+    if (!seller) {
+      return res.status(404).json({ message: "Seller not found" });
+    }
+
+    // Verify the password
+    if (seller.password !== password) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+
+    // Successful login response
+    res.status(200).json({ message: "Login successful", seller });
+  } catch (error) {
+    res.status(500).json({ message: "Error logging in", error: error.message });
+  }
+};
+
+
 module.exports = {
   addSeller,
   getSellers,
   getSeller,
   updateSeller,
   deleteSeller,
+  loginSeller,
 };

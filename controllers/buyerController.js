@@ -55,13 +55,13 @@ const deleteBuyer = async (req, res, next) => {
   }
 };
 
-const loginBuyer = async (req, res, next) => {
-  const { mobile, password } = req.body;
+const loginBuyer = async (req, res) => {
   try {
+    const { mobile, password } = req.body;
     const buyer = await buyerService.loginBuyer(mobile, password);
-    res.status(200).json(buyer);
-  } catch (err) {
-    res.status(401).json({ message: "Invalid credentials or inactive account" });
+    res.json({ message: "Login successful", buyer });
+  } catch (error) {
+    res.status(401).json({ error: error.message });
   }
 };
 

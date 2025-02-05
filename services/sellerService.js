@@ -21,10 +21,15 @@ const deleteSeller = async (id) => {
   return await Seller.findByIdAndDelete(id);
 };
 
+const getSellerByPhone = async (phone) => {
+  return await Seller.findOne({ "phoneNumbers.value": phone });
+};
+
 module.exports = {
   addSellerDetails,
   getSellers,
   getSellerById,
   updateSeller,
   deleteSeller,
+  getSellerByPhone,
 };

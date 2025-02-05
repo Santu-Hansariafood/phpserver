@@ -22,10 +22,16 @@ const deleteBuyer = async (id) => {
 };
 
 const loginBuyer = async (mobile, password) => {
-  const buyer = await Buyer.findOne({ mobile, password, status: "active" });
+  const buyer = await Buyer.findOne({ mobile: mobile });
+
   if (!buyer) {
-    throw new Error("Invalid credentials or inactive account");
+    throw new Error("Buyer not found");
   }
+
+  if (buyer.password !== password) {
+    throw new Error("Invalid password");
+  }
+
   return buyer;
 };
 
