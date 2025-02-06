@@ -24,8 +24,8 @@ const selfOrderSchema = new mongoose.Schema(
     commodity: { type: String, trim: true },
     parameters: [
       {
-        parameter: { type: String, required: true, trim: true },
-        value: { type: String, required: true, trim: true },
+        parameter: { type: String, required: false, trim: true },
+        value: { type: String, required: false, trim: true },
         _id: { type: mongoose.Schema.Types.ObjectId, auto: true },
       },
     ],       

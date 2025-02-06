@@ -22,6 +22,7 @@ if (cluster.isMaster) {
 
   const app = express();
   const PORT = process.env.PORT || 5000;
+  const SERVER_URL = process.env.SERVER_URL || "https://phpserver-v77g.onrender.com";
 
   // Connect to the database
   connectDB();
@@ -43,6 +44,21 @@ if (cluster.isMaster) {
     res.set("Cache-Control", "public, max-age=3600");
     next();
   });
+
+  //This line are added
+
+  app.get("/api/keep-alive", (req, res) => {
+    res.send("Server is awake");
+  });
+
+  // Self-Pinging Mechanism to Keep Backend Active
+  setInterval(() => {
+    axios.get(`${SERVER_URL}/keep-alive`)
+      .then(() => console.log("Keep-alive ping successful"))
+      .catch((err) => console.error("Keep-alive ping failed", err.message));
+  }, 4 * 60 * 1000);
+
+  //added ended
 
   // Lazy-loaded routes
   app.use("/api/groups", (req, res, next) => {
