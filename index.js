@@ -117,6 +117,10 @@ if (cluster.isMaster) {
     require("./routes/SaudaNoRoutes")(req, res, next);
   });
 
+  app.use("/api/participatebids", (req,res,next) => {
+    require("./routes/participationRoutes")(req, res, next);
+  })
+
   // Lazy-load error handler middleware
   app.use(async (err, req, res, next) => {
     const errorHandler = await import("./middlewares/errorHandler.js");
