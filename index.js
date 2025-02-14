@@ -32,20 +32,15 @@ if (cluster.isMaster) {
   app.use(cors());
   app.use(compression());
   app.use(helmet());
+  const axios = require("axios");
 
-  const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 100,
-  });
+  const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 100 });
   app.use(limiter);
 
-  // Set Cache-Control headers globally for all responses (cache for 1 hour)
   app.use((req, res, next) => {
     res.set("Cache-Control", "public, max-age=3600");
     next();
   });
-
-  //This line are added
 
   app.get("/api/keep-alive", (req, res) => {
     res.send("Server is awake");
@@ -53,7 +48,7 @@ if (cluster.isMaster) {
 
   // Self-Pinging Mechanism to Keep Backend Active
   setInterval(() => {
-    axios.get(`${SERVER_URL}/keep-alive`)
+    axios.get(`${SERVER_URL}/api/keep-alive`)
       .then(() => console.log("Keep-alive ping successful"))
       .catch((err) => console.error("Keep-alive ping failed", err.message));
   }, 4 * 60 * 1000);
