@@ -34,6 +34,8 @@ if (cluster.isMaster) {
   app.use(helmet());
   const axios = require("axios");
 
+  app.set("trust proxy", 1);
+
   const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 100 });
   app.use(limiter);
 
