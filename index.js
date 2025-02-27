@@ -122,6 +122,10 @@ if (cluster.isMaster) {
     require("./routes/confirmBidRoutes")(req, res, next);
   });
 
+  app.use("/api/loading-entries", (req, res, next) =>{
+    require("./routes/loadingEntryRoutes")(req,res,next);
+  });
+
   // Lazy-load error handler middleware
   app.use(async (err, req, res, next) => {
     const errorHandler = await import("./middlewares/errorHandler.js");
