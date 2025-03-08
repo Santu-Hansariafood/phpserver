@@ -7,6 +7,7 @@ const ParameterSchema = new mongoose.Schema({
 
 const CommoditySchema = new mongoose.Schema({
   name: { type: String, required: true },
+  brokerage: { type: Number, required: true },
   parameters: [ParameterSchema],
 });
 
