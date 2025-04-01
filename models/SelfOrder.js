@@ -29,7 +29,7 @@ const selfOrderSchema = new mongoose.Schema(
         _id: { type: mongoose.Schema.Types.ObjectId, auto: true },
       },
     ],       
-    poNumber: { type: String, required: true, unique: true, trim: true },
+    poNumber: { type: String, required: true, trim: true },
     poDate: { type: Date, default: Date.now },
     state: { type: String, trim: true },
     location: { type: String, trim: true },
