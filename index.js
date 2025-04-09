@@ -44,16 +44,16 @@ if (cluster.isMaster) {
     next();
   });
 
-  app.get("/api/keep-alive", (req, res) => {
-    res.send("Server is awake");
-  });
+  // app.get("/api/keep-alive", (req, res) => {
+  //   res.send("Server is awake");
+  // });
 
-  // Self-Pinging Mechanism to Keep Backend Active
-  setInterval(() => {
-    axios.get(`${SERVER_URL}/api/keep-alive`)
-      .then(() => console.log("Keep-alive ping successful"))
-      .catch((err) => console.error("Keep-alive ping failed", err.message));
-  }, 4 * 60 * 1000);
+  // // Self-Pinging Mechanism to Keep Backend Active
+  // setInterval(() => {
+  //   axios.get(`${SERVER_URL}/api/keep-alive`)
+  //     .then(() => console.log("Keep-alive ping successful"))
+  //     .catch((err) => console.error("Keep-alive ping failed", err.message));
+  // }, 4 * 60 * 1000);
 
   //added ended
 
