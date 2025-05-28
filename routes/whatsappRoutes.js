@@ -19,9 +19,10 @@ router.post("/send", async (req, res) => {
     const results = await Promise.allSettled(
       relevantSellers.map((seller) => {
         const phone = seller.phoneNumbers[0]?.value;
-        const isValidPhone = /^\d{10}$/.test(phone);
+        // Allow for country code
+        const isValidPhone = /^\d{10,13}$/.test(phone);
         if (!phone || !isValidPhone) {
-          console.warn(`Invalid phone for ${seller.sellerName}`);
+          console.warn(`Invalid phone for ${seller.sellerName}: ${phone}`);
           return null;
         }
 
