@@ -14,13 +14,12 @@ const sendWhatsAppMessage = async ({
 }) => {
   try {
     console.log("WhatsApp API Key:", process.env.WHATSAPP_API_KEY);
-    const url = `https://official.nkinfo.in/wapp/api/v2/send/bytemplate`;
+    const url = 'http://official.nkinfo.in/wapp/api/v2/send/bytemplate';
 
-    // Construct the request body
-    const requestBody = {
+    const params = new URLSearchParams({
       apikey: process.env.WHATSAPP_API_KEY,
       templatename: 'buy',
-      mobile,
+      mobile: mobile,
       param1: bidId || '',
       param2: group || '',
       param3: consignee || '',
@@ -30,11 +29,12 @@ const sendWhatsAppMessage = async ({
       param7: `${paymentTerms || ''} Days`,
       param8: endTime || '',
       param9: 'https://hansariafood.shop'
-    };
+    });
 
-    console.log("WhatsApp API Request Body:", requestBody);
+    const fullUrl = `${url}?${params.toString()}`;
+    console.log("WhatsApp API Request URL:", fullUrl);
 
-    const response = await axios.post(url, requestBody);
+    const response = await axios.get(fullUrl);
     console.log("WhatsApp API Response:", response.data);
 
     return response.data;
