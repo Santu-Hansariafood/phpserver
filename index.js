@@ -110,6 +110,8 @@ if (cluster.isMaster) {
     require("./routes/selfOrderRoutes")(req, res, next);
   });
 
+app.use("/api/whatsapp", require("./routes/whatsappRoutes"));
+
   app.use("/api/sauda-no", (req, res, next) => {
     require("./routes/SaudaNoRoutes")(req, res, next);
   });
