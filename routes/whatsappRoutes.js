@@ -1,14 +1,28 @@
+require("dotenv").config();
 const express = require("express");
 const router = express.Router();
 const Seller = require("../models/Seller");
 const { sendWhatsAppMessage } = require("../config/whatsapp");
 
+// Helper to format end time to 12-hour with am/pm
+const formatEndTime = (timeStr) => {
+  const [hour, minute] = timeStr.split(":");
+  const h = parseInt(hour, 10);
+  const suffix = h >= 12 ? "pm" : "am";
+  const formattedHour = ((h + 11) % 12 + 1);
+  return `${formattedHour}.${minute}${suffix}`;
+};
+
 router.post("/send", async (req, res) => {
   try {
-    const { bidData, bidId } = req.body;
+    const { bidData, bidId, apiKey } = req.body;
 
     if (!bidData || !bidId) {
       return res.status(400).json({ message: "Missing bidData or bidId" });
+    }
+
+    if (!apiKey || apiKey !== process.env.WHATSAPP_API_KEY) {
+      return res.status(401).json({ message: "Invalid API key" });
     }
 
     const sellers = await Seller.find({});
@@ -17,33 +31,52 @@ router.post("/send", async (req, res) => {
     );
 
     const results = await Promise.allSettled(
-      relevantSellers.map((seller) => {
-        const phone = seller.phoneNumbers[0]?.value;
-        // Allow for country code
+      relevantSellers.map(async (seller) => {
+        const phone = seller.phoneNumbers?.[0]?.value;
         const isValidPhone = /^\d{10,13}$/.test(phone);
+
         if (!phone || !isValidPhone) {
           console.warn(`Invalid phone for ${seller.sellerName}: ${phone}`);
-          return null;
+          return { phone, status: "invalid" };
         }
 
-        return sendWhatsAppMessage({
-          mobile: phone,
-          bidId,
-          group: bidData.group,
-          consignee: bidData.consignee,
-          commodity: bidData.commodity,
-          quantity: bidData.quantity,
-          origin: bidData.origin,
-          paymentTerms: bidData.paymentTerms,
-          endTime: bidData.endTime,
-        });
+        try {
+          const result = await sendWhatsAppMessage({
+            mobile: phone,
+            bidId,
+            group: bidData.group,
+            consignee: bidData.consignee,
+            commodity: bidData.commodity,
+            quantity: bidData.quantity,
+            rate: bidData.rate,
+            endTime: formatEndTime(bidData.endTime),
+          });
+
+          return { phone, status: "success", result };
+        } catch (error) {
+          return { phone, status: "error", error: error.message };
+        }
       })
     );
 
-    res.status(200).json({ message: "WhatsApp messages processed", results });
+    const summary = {
+      total: results.length,
+      success: results.filter((r) => r.status === "fulfilled" && r.value?.status === "success").length,
+      failed: results.filter((r) => r.status === "rejected" || r.value?.status === "error").length,
+      invalid: results.filter((r) => r.value?.status === "invalid").length,
+    };
+
+    res.status(200).json({
+      message: "WhatsApp messages processed",
+      summary,
+      results,
+    });
   } catch (error) {
-    console.error("Backend WhatsApp error:", error.message);
-    res.status(500).json({ message: "Internal Server Error" });
+    console.error("Backend WhatsApp error:", error);
+    res.status(500).json({
+      message: "Internal Server Error",
+      error: error.message,
+    });
   }
 });
 
