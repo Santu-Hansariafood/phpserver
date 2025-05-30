@@ -4,15 +4,6 @@ const router = express.Router();
 const Seller = require("../models/Seller");
 const { sendWhatsAppMessage } = require("../config/whatsapp");
 
-// Helper to format end time to 12-hour with am/pm
-const formatEndTime = (timeStr) => {
-  const [hour, minute] = timeStr.split(":");
-  const h = parseInt(hour, 10);
-  const suffix = h >= 12 ? "pm" : "am";
-  const formattedHour = ((h + 11) % 12 + 1);
-  return `${formattedHour}.${minute}${suffix}`;
-};
-
 router.post("/send", async (req, res) => {
   try {
     const { bidData, bidId, apiKey } = req.body;
@@ -26,8 +17,9 @@ router.post("/send", async (req, res) => {
     }
 
     const sellers = await Seller.find({});
+
     const relevantSellers = sellers.filter((seller) =>
-      seller.commodities.some((c) => c.name === bidData.commodity)
+      (seller.commodities || []).some((c) => c.name === bidData.commodity)
     );
 
     const results = await Promise.allSettled(
@@ -36,8 +28,8 @@ router.post("/send", async (req, res) => {
         const isValidPhone = /^\d{10,13}$/.test(phone);
 
         if (!phone || !isValidPhone) {
-          console.warn(`Invalid phone for ${seller.sellerName}: ${phone}`);
-          return { phone, status: "invalid" };
+          console.warn(`Invalid phone for ${seller.sellerName || "Unknown"}: ${phone}`);
+          return { status: "invalid", phone, seller: seller.sellerName || "Unknown" };
         }
 
         try {
@@ -49,12 +41,22 @@ router.post("/send", async (req, res) => {
             commodity: bidData.commodity,
             quantity: bidData.quantity,
             rate: bidData.rate,
-            endTime: formatEndTime(bidData.endTime),
+            endTime: bidData.endTime,
           });
 
-          return { phone, status: "success", result };
+          return {
+            status: "success",
+            phone,
+            seller: seller.sellerName || "Unknown",
+            result,
+          };
         } catch (error) {
-          return { phone, status: "error", error: error.message };
+          return {
+            status: "error",
+            phone,
+            seller: seller.sellerName || "Unknown",
+            error: error.message,
+          };
         }
       })
     );
@@ -62,14 +64,16 @@ router.post("/send", async (req, res) => {
     const summary = {
       total: results.length,
       success: results.filter((r) => r.status === "fulfilled" && r.value?.status === "success").length,
-      failed: results.filter((r) => r.status === "rejected" || r.value?.status === "error").length,
-      invalid: results.filter((r) => r.value?.status === "invalid").length,
+      failed: results.filter((r) =>
+        r.status === "rejected" || (r.status === "fulfilled" && r.value?.status === "error")
+      ).length,
+      invalid: results.filter((r) => r.status === "fulfilled" && r.value?.status === "invalid").length,
     };
 
     res.status(200).json({
       message: "WhatsApp messages processed",
       summary,
-      results,
+      results: results.map((r) => r.value || { status: "rejected", reason: r.reason }),
     });
   } catch (error) {
     console.error("Backend WhatsApp error:", error);

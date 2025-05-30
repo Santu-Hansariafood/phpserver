@@ -50,7 +50,8 @@ if (cluster.isMaster) {
 
   // Self-Pinging Mechanism to Keep Backend Active
   setInterval(() => {
-    axios.get(`${SERVER_URL}/api/keep-alive`)
+    axios
+      .get(`${SERVER_URL}/api/keep-alive`)
       .then(() => console.log("Keep-alive ping successful"))
       .catch((err) => console.error("Keep-alive ping failed", err.message));
   }, 4 * 60 * 1000);
@@ -64,7 +65,7 @@ if (cluster.isMaster) {
 
   app.use("/api/admin", (req, res, next) => {
     require("./routes/adminRoutes")(req, res, next);
-  });  
+  });
 
   app.use("/api/buyers", (req, res, next) => {
     require("./routes/buyerRoutes")(req, res, next);
@@ -110,13 +111,13 @@ if (cluster.isMaster) {
     require("./routes/selfOrderRoutes")(req, res, next);
   });
 
-app.use("/api/whatsapp", require("./routes/whatsappRoutes"));
+  app.use("/api/whatsapp", require("./routes/whatsappRoutes"));
 
   app.use("/api/sauda-no", (req, res, next) => {
     require("./routes/SaudaNoRoutes")(req, res, next);
   });
 
-  app.use("/api/participatebids", (req,res,next) => {
+  app.use("/api/participatebids", (req, res, next) => {
     require("./routes/participationRoutes")(req, res, next);
   });
 
@@ -124,8 +125,8 @@ app.use("/api/whatsapp", require("./routes/whatsappRoutes"));
     require("./routes/confirmBidRoutes")(req, res, next);
   });
 
-  app.use("/api/loading-entries", (req, res, next) =>{
-    require("./routes/loadingEntryRoutes")(req,res,next);
+  app.use("/api/loading-entries", (req, res, next) => {
+    require("./routes/loadingEntryRoutes")(req, res, next);
   });
 
   // Lazy-load error handler middleware
