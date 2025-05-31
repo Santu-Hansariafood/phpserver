@@ -20,52 +20,47 @@ const sendWhatsAppMessage = async ({
   endTime,
 }) => {
   try {
-    if (!mobile) throw new Error("Missing mobile number");
-    if (!process.env.WHATSAPP_API_KEY)
-      throw new Error("Missing WhatsApp API key");
+    const apiKey = process.env.WHATSAPP_API_KEY;
+    if (!mobile || !apiKey) throw new Error("Missing mobile or API key");
 
     const formattedTime = formatEndTime(endTime);
     const buyingInfo = `${commodity}  ${group}  ${consignee}  ${quantity} ton ${rate}`;
 
-    // ✅ Defensive check
-    if (!bidId || !buyingInfo || !formattedTime) {
-      console.error("❌ Missing template parameters:", {
-        bidId,
-        buyingInfo,
-        formattedTime,
-      });
-      throw new Error("One or more WhatsApp template params are missing.");
-    }
+    const to = Array.isArray(mobile) ? mobile.join(",") : mobile;
 
-    console.log("🚀 Sending WhatsApp message with params:");
-    console.log({
-      apikey: process.env.WHATSAPP_API_KEY,
-      templatename: "test",
-      mobile,
-      param1: bidId,
-      param2: buyingInfo,
-      param3: formattedTime,
-    });
+    const payload = {
+      payloadVersion: 0.1,
+      to,
+      isTemplate: true,
+      template: {
+        namespace: "buy",
+      },
+      components: [
+        {
+          type: "body",
+          body: {
+            parameters: [bidId, buyingInfo, formattedTime],
+          },
+        },
+      ],
+    };
 
-    const response = await axios.get(
-      "http://official.nkinfo.in/wapp/api/v2/send/bytemplate",
+    const response = await axios.post(
+      "http://official.nkinfo.in/wapp/api/send/bytemplate/json/clevertap",
+      payload,
       {
-        params: {
-          apikey: process.env.WHATSAPP_API_KEY,
-          templatename: "test",
-          mobile,
-          param1: bidId,
-          param2: buyingInfo,
-          param3: formattedTime,
+        headers: {
+          "X-API-KEY": apiKey,
+          "Content-Type": "application/json",
         },
       }
     );
 
-    console.log("✅ WhatsApp response:", response.data);
+    // console.log("WhatsApp response:", response.data);
     return response.data;
   } catch (error) {
     console.error(
-      "❌ WhatsApp API Error:",
+      "WhatsApp API Error:",
       error?.response?.data || error.message
     );
     throw new Error(

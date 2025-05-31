@@ -28,8 +28,14 @@ router.post("/send", async (req, res) => {
         const isValidPhone = /^\d{10,13}$/.test(phone);
 
         if (!phone || !isValidPhone) {
-          console.warn(`Invalid phone for ${seller.sellerName || "Unknown"}: ${phone}`);
-          return { status: "invalid", phone, seller: seller.sellerName || "Unknown" };
+          console.warn(
+            `Invalid phone for ${seller.sellerName || "Unknown"}: ${phone}`
+          );
+          return {
+            status: "invalid",
+            phone,
+            seller: seller.sellerName || "Unknown",
+          };
         }
 
         try {
@@ -63,17 +69,25 @@ router.post("/send", async (req, res) => {
 
     const summary = {
       total: results.length,
-      success: results.filter((r) => r.status === "fulfilled" && r.value?.status === "success").length,
-      failed: results.filter((r) =>
-        r.status === "rejected" || (r.status === "fulfilled" && r.value?.status === "error")
+      success: results.filter(
+        (r) => r.status === "fulfilled" && r.value?.status === "success"
       ).length,
-      invalid: results.filter((r) => r.status === "fulfilled" && r.value?.status === "invalid").length,
+      failed: results.filter(
+        (r) =>
+          r.status === "rejected" ||
+          (r.status === "fulfilled" && r.value?.status === "error")
+      ).length,
+      invalid: results.filter(
+        (r) => r.status === "fulfilled" && r.value?.status === "invalid"
+      ).length,
     };
 
     res.status(200).json({
       message: "WhatsApp messages processed",
       summary,
-      results: results.map((r) => r.value || { status: "rejected", reason: r.reason }),
+      results: results.map(
+        (r) => r.value || { status: "rejected", reason: r.reason }
+      ),
     });
   } catch (error) {
     console.error("Backend WhatsApp error:", error);
