@@ -24,7 +24,7 @@ const sendWhatsAppMessage = async ({
     if (!mobile || !apiKey) throw new Error("Missing mobile or API key");
 
     const formattedTime = formatEndTime(endTime);
-    const buyingInfo = `${commodity}  ${group}  ${consignee}  ${quantity} ton ${rate}`;
+    const buyingInfo = `${commodity}  ${consignee}  ${quantity} Tons at ₹${rate}/-`;
 
     const to = Array.isArray(mobile) ? mobile.join(",") : mobile;
 
