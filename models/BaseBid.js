@@ -2,6 +2,11 @@ const mongoose = require("mongoose");
 
 const baseBidSchema = new mongoose.Schema(
   {
+    bidId: {
+      type: String,
+      required: true,
+      unique: true,
+    },
     type: { type: String, enum: ["buyer", "seller"], required: true },
     group: { type: String, required: true },
     consignee: { type: String, required: true },
